@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<link rel="shortcut icon"
+	href="https://icons8.com/icon/41273/speed-filled" />
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+	integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+	crossorigin="anonymous">
+
+<title>Tela Admin</title>
+
+<style type="text/css">
+body {
+	background-image: url(/imagens/Fundo.png);
+	background-color: #00CDCD;
+}
+
+h1 {
+	font-weight: bold;
+	color: #696969;
+	font-style: italic;
+	/*    font-size: 100px;
+text-align: center;*/
+}
+
+h2 {
+	font-weight: bold;
+	color: #696969;
+	font-style: italic;
+	/*    font-size: 100px;
+text-align: center;*/
+}
+
+.box {
+	display: inline-block;
+}
+
+#modalDecision {
+	width: 1000px;
+	height: 1000px;
+}
+
+.card {
+	border-radius: 10px;
+	top: 10%;
+	margin: 0 auto;
+	float: none;
+	margin-bottom: 10px;
+}
+
+#bttBuscar {
+	width: 15rem;
+	font-weight: bold;
+}
+</style>
+
+</head>
+
+<body>
+
+	<nav
+		class="navbar navbar-light navbar-expand-lg bg-light justify-content-between">
+		<div class="container-fluid">
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target=".dual-nav">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div
+				class="navbar-collapse collapse dual-nav w-50 order-1 order-md-0">
+
+			</div>
+
+			<a href="/"
+				class="navbar-brand mx-auto d-block text-center order-0 order-md-1 w-25"><img
+				src="imagens/Logo.png" alt="Logo" style="width: 150px;"></a>
+			<div class="navbar-collapse collapse dual-nav w-50 order-2">
+				<br>
+				<ul class="nav navbar-nav ml-auto">
+					<div class="mr-2">
+
+						<a class="btn btn-primary btn-lg" th:href="@{/listarCleaner/}" style="background-color: #008b8b; border-color: #008b8b"></i>Selecionar</a>
+					</div>
+				</ul>
+			</div>
+		</div>
+
+
+		<br> <br>
+
+	</nav>
+
+	<br>
+	<br>
+	<br>
+	<div class="shadow card text-center" style="width: 90%;">
+		<div class="card-body">
+			<h1>Seja Bem-Vindo Administrador</h1>
+			<small id="emailHelp" class="form-text text-muted"
+				style="color: #008B8B;">Descubra se tem alguem perto de
+				você. Coloque o CEP da sua residência. </small>
+			<hr>
+			<br>
+
+
+
+		</div>
+	</div>
+
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+
+</body>

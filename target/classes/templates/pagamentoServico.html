@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+	
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+	integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+	integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+	crossorigin="anonymous"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+	crossorigin="anonymous"></script>
+
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+	integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+	crossorigin="anonymous">
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	
+
+<title>Solicitação de Serviço</title>
+
+<style type="text/css">
+body {
+	background-image: url(/imagens/Fundo.png);
+	background-color: #00cdcd;
+}
+
+button {
+	cursor: pointer;
+}
+
+@media screen and (min-width: 320px) {
+	button {
+		margin-top: 10px;
+	}
+}
+
+label {
+	font-size: 15px;
+}
+
+#divinterna {
+	margin: auto;
+	background-color: #ffffff;
+	border-radius: 6px;
+}
+
+#divexterna {
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+#cardPagamento {
+	width: 70%;
+	height: auto;
+	border-radius: 10px;
+	top: 10%;
+	margin: 0 auto;
+	float: none;
+	margin-bottom: 10px;
+}
+
+#cardServico{
+	width: 70%;
+	height: auto;
+	border-radius: 10px;
+	top: 10%;
+	margin: 0 auto;
+	float: none;
+	margin-bottom: 10px;
+}
+
+.card-title {
+	text-align: center;
+	font-size: 35px;
+	font-weight: bold;
+}
+</style>
+
+<script type="text/javascript">
+
+	/*Uma maneira de inicializar todos tooltips, em uma página*/
+	$(function () {
+		  $('[data-toggle="tooltip"]').tooltip()
+		});
+	
+	/* Máscaras ER */
+	function mascara(o, f) {
+		v_obj = o
+		v_fun = f
+		setTimeout("execmascara()", 1)
+	}
+	function execmascara() {
+		v_obj.value = v_fun(v_obj.value)
+	}
+	/*Mascara do cartao*/
+	function mcc(v) {
+		v = v.replace(/\D/g, "");
+		v = v.replace(/^(\d{4})(\d)/g, "$1 $2");
+		v = v.replace(/^(\d{4})\s(\d{4})(\d)/g, "$1 $2 $3");
+		v = v.replace(/^(\d{4})\s(\d{4})\s(\d{4})(\d)/g, "$1 $2 $3 $4");
+		return v;
+	}
+	
+	/*Marcara do CVC*/
+	function mVal(val) {
+		val = val.replace(/\D/g, "");
+		val = val.replace(/^(\d{2})(\d)/g, "$1/$2");
+		val = val.replace(/(\d)(\d{4})$/, "$1/$2");
+		return val;
+	}
+
+	function id(el) {
+		return document.getElementById(el);
+	}
+	window.onload = function() {
+		id('numeroCartao').onkeypress = function() {
+			mascara(this, mcc);
+		}
+	}
+
+	window.onload = function() {
+		id('cvc').onkeypress = function() {
+			mascara(this, mVal);
+		}
+	}
+	
+	
+	function AddValor(){
+	total = 5;
+	valorOutros = 0;
+	valorQtdeQuartos = 0;
+	valorQtdeBanheiros = 0
+		
+	 
+	//Chama a função com click em qualquer checkbox
+	$(':checkbox').click(function() {
+	  	//Atribui o valor do input p/ variável 'valor'
+	  	var valor = parseInt($(this).val());
+	  	//Se o checkbox for marcado ele soma se não subtrai
+	  	if ($(this).is(":checked")) {
+	  		valorOutros += valor;
+	  	} else {
+	  		valorOutros -= valor;
+	  	}
+	  
+	 	//Atribui o valor ao input	 
+	  	atualizarTotal();
+	  
+		});
+	}
+	
+	function selecionarQtdQuartos(){
+		var qtdeQuartos = document.getElementById("qtdQuartos").value;
+		valorQtdeQuartos = qtdeQuartos * 15;
+		atualizarTotal();
+	}
+	
+	function selecionarQtdBanheiros(){
+		var qtdeBanheiros = document.getElementById("qtdBanheiro").value;
+		valorQtdeBanheiros = qtdeBanheiros * 19;
+		atualizarTotal();
+	}
+	
+	function atualizarTotal(){
+		total = 5 + valorOutros + valorQtdeQuartos+valorQtdeBanheiros;
+		$("#valor").html("<h4>"+total+",00</h4>");
+	}
+	
+	window.onload = function(){ 
+		 AddValor();
+	}
+	
+	
+	
+</script>
+
+</head>
+
+<body>
+	<nav
+		class="navbar navbar-light navbar-expand-lg bg-light justify-content-between">
+		<div class="container-fluid">
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target=".dual-nav">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div
+				class="navbar-collapse collapse dual-nav w-50 order-1 order-md-0">
+
+			</div>
+			<a href="/"
+				class="navbar-brand mx-auto d-block text-center order-0 order-md-1 w-25"><img
+				src="/imagens/Logo.png" alt="Logo" style="width: 185px;"></a>
+			<div class="navbar-collapse collapse dual-nav w-50 order-2"></div>
+		</div>
+	</nav>
+
+	<br>
+	<br>
+
+	<div class="card" id="cardServico">
+		<br>
+		<div class="card-body">
+			<h5 class="card-title">Solicite seu serviço</h5>
+			<small id="emailHelp" class="form-text text-muted"
+				style="text-align: center"> Informe sobre seu Apto</small><br>
+				
+			
+				<div class="form-row">
+					<div class="form-group col-md-6 ">
+						<label for="inputState">Quantidade de Quartos</label> 
+						<select
+							onchange="selecionarQtdQuartos()"
+							id="qtdQuartos" class="form-control">
+							<option th:text="Nenhum" th:value="0"></option>
+							<option th:text="|1 Quarto|" th:value="1" />
+							<option th:text="|2 Quartos|" th:value="2" />
+							<option th:text="|3 Quartos|" th:value="3" />
+							<option th:text="|4 Quartos|" th:value="4" />
+							<option th:text="|5 Quartos|" th:value="5" />
+							<option th:text="|6 Quartos|" th:value="6" />
+							<option th:text="|7 Quartos|" th:value="7" />
+							<option th:text="|8 Quartos|" th:value="8" />
+							<option th:text="|9 Quartos|" th:value="9" />
+							<option th:text="|10 Quartos|" th:value="10" />
+						</select>
+					</div>
+
+					<div class="form-group col-md-6 ">
+						<label for="inputState">Quantidade de Banheiros</label> 
+						<select onchange="selecionarQtdBanheiros()"
+							id="qtdBanheiro" class="form-control">
+							<option th:text="Nenhum" th:value="0"></option>
+							<option th:text="|1 Banheiro|" th:value="1" />
+							<option th:text="|2 Banheiros|" th:value="2" />
+							<option th:text="|3 Banheiros|" th:value="3" />
+							<option th:text="|4 Banheiros|" th:value="4" />
+							<option th:text="|5 Banheiros|" th:value="5" />
+							<option th:text="|6 Banheiros|" th:value="6" />
+							<option th:text="|7 Banheiros|" th:value="7" />
+							<option th:text="|8 Banheiros|" th:value="8" />
+							<option th:text="|9 Banheiros|" th:value="9" />
+							<option th:text="|10 Banheiros|" th:value="10" />
+						</select>
+					</div>
+				</div>
+				<br>
+				<h5>Outros</h5>
+				<small  class="form-text text-muted"> *Passe o mouse por cima do serviço para ver preço</small><br>
+
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox"
+						name="cozinha" id="cozinha" value="7"> 
+					<label href="#"  class="form-check-label" for="cozinha" th:text="Cozinha" data-toggle="tooltip" title="O Valor do serviço é R$ 7,00"> </label>
+				</div>
+				
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="5"
+						id="salaEstar"> <label class="form-check-label"
+						for="salaEstar" data-toggle="tooltip" title="O Valor do serviço é R$ 5,00"> Sala de Estar </label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="5"
+						id="salaJantar"> <label class="form-check-label"
+						for="salaEstar" data-toggle="tooltip" title="O Valor do serviço é R$ 5,00"> Sala de Jantar </label>
+				</div>
+
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="6"
+						id="salaEntretenimento"> <label class="form-check-label"
+						for="salaEstar" data-toggle="tooltip" title="O Valor do serviço é R$ 6,00"> Sala de Entretenimento </label>
+				</div>
+				<br>
+				<h5>Extras</h5>
+
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="10"
+						id="lavaLouca"> <label class="form-check-label"
+						for="lavaLouca" data-toggle="tooltip" title="O Valor do serviço é R$ 10,00"> Lavagem de Louça </label>
+				</div>
+
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="15"
+						id="lavaRoupa"> <label class="form-check-label"
+						for="lavaRoupa" data-toggle="tooltip" title=" O Valor do serviço é R$ 15,00"> Lavagem de Roupa </label>
+				</div>
+
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="9"
+						id="lavaGeladeira"> <label class="form-check-label"
+						for="lavaGeladeira" data-toggle="tooltip" title="O Valor do serviço é R$ 9,00">Limpeza de Geladeira</label>
+				</div>
+				<br>
+				<br>
+				<br>
+				<div class="card-footer text-muted">
+					<div class="form-row">
+						<div class="form-group col-md-10 ">Valor Total: R$
+						<small  class="form-text text-muted"> *Taxa fixa de 5,00</small><br>
+						</div>
+					
+						<div id="valor" class="form-group col-md-2 ">
+							<h4>5,00</h4>
+						</div>
+					</div>
+				</div>
+				</div>
+		</div>
+
+
+		<!-- PAGAMENTO -->
+		<div class="card" id="cardPagamento">
+			<br>
+			<div class="card-body">
+				<h5 class="card-title">Pagamento</h5>
+				<br> <br>
+
+
+				<div class="form-row">
+
+					<div class="form-group col-md-6 ">
+						<label for="inputState">Selecione seu cartão</label> <select
+							id="bandeira" class="form-control">
+							<option th:text="--" th:value="'NULL'" />
+							<option th:text="MasterCard" th:value="'mastercard'" />
+							<option th:text="Visa" th:value="'visa'" />
+							<option th:text="HiperCard" th:value="'hipercard'" />
+							<option th:text="Elo" th:value="'elo'" />
+							<option th:text="|American Express|"
+								th:value="'american_express'" />
+							<option th:text="Diners" th:value="'diners'" />
+						</select>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="inputEmail4">Nome do Titular</label> <input
+							type="text" class="form-control" id="titular"
+							placeholder="Nome do Titular" maxlength="100" required>
+						<div class="invalid-tooltip">Campo obrigatorio.</div>
+					</div>
+
+				</div>
+
+				<div class="form-row">
+
+					<div class="form-group col-md-8">
+						<label for="inputNumberCard">Número do Cartão</label> <input
+							type="tel" name="numeroCartao" id="numeroCartao"
+							class="form-control" placeholder="XXXX-XXXX-XXXX-XXXX"
+							maxlength="19" onkeyup="mascara( this, mcc );" required>
+						<div class="invalid-tooltip">Campo obrigatorio.</div>
+					</div>
+
+					<div class="form-group col-md-4">
+						<label for="inputVal">Validade (Mês/Ano)</label> <input
+							class="form-control" placeholder="MM/AAAA" maxlength="7"
+							type="tel" name="cvc" id="cvc" onkeyup="mascara( this, mVal );"
+							required>
+						<div class="invalid-tooltip">Campo obrigatorio.</div>
+					</div>
+
+				</div>
+
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="inputNumberCard">Código de Segurança</label> <input
+							type="text" class="form-control" id="numcartao"
+							placeholder="Numero do Cartão" maxlength="3" required>
+						<div class="invalid-tooltip">Campo obrigatorio.</div>
+					</div>
+					<div class="form-group col-md-6 ">
+						<label for="inputState">Selecione o número de parcelas</label> <select
+							id="parcela" class="form-control">
+							<option th:text="--" th:value="'NULL'"></option>
+							<option th:text="|1x s/juros|" th:value="'1_vez'"></option>
+							<option th:text="|2x s/juros|" th:value="'2_vezes'"></option>
+							<option th:text="|3x s/juros|" th:value="'3_vezes'"></option>
+							<option th:text="|4x s/juros|" th:value="'4_vezes'"></option>
+							<option th:text="5x" th:value="'5_vezes'"></option>
+							<option th:text="6x" th:value="'6_vezes'"></option>
+							<option th:text="7x" th:value="'7_vezes'"></option>
+							<option th:text="8x" th:value="'8_vezes'"></option>
+							<option th:text="9x" th:value="'9_vezes'"></option>
+							<option th:text="10x" th:value="'10_vezes'"></option>
+						</select>
+					</div>
+					<small id="emailHelp" class="form-text text-muted"
+						style="text-align: center"> * O código de segurança do
+						cartão são 3 dígitos no verso do cartão logo após o número.</small><br>
+					<br>
+
+				</div>
+
+
+				<div class="col text-center">
+					<br> <br>
+					<button id="btnConfirmar" type="submit"
+						class="btn btn-secondary btn-lg" onclick="confirmarServico()">Confirmar Serviço</button>
+				</div>
+
+			</div>
+		</div>
+		
+		<script>
+			var API_NODE = "http://localhost:3000";
+			var API_JAVA = "http://localhost:8080";
+			var CLEANER_ID = 1;
+			function confirmarServico() {
+				
+				const data = {
+					cleaner_id: 1
+				};
+				
+				$.ajax({
+			        url: `${API_JAVA}/servicos/criar/${CLEANER_ID}`,
+			        type: 'post',
+			        dataType: 'json',
+			        contentType: 'application/json; charset=utf-8',
+			        data: JSON.stringify(data),
+			        success: function(servico){
+			        	enviarNotificacaoServico(servico.cleanerSocketId, servico.id);
+			        },
+			        error: function(err){
+			            console.log(err);
+			        }
+			    });   
+			}
+			
+			function enviarNotificacaoServico(socketId, servicoId) {
+				
+				const data = {
+						socket_id: socketId,
+						service_id: servicoId
+				};
+				
+				$.ajax({
+			        url: `${API_NODE}/solicitar/` + socketId,
+			        type: 'post',
+			        dataType: 'json',
+			        contentType: 'application/json; charset=utf-8',
+			        data: JSON.stringify(data),
+			        success: function(retorno){
+			        	console.log(retorno);
+			        },
+			        error: function(err){
+			            console.log(err);
+			        }
+			    });   
+			}
+		</script>
+</body>
+
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	
+	<!-- Popper JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
+
+<title>Tela - Menu</title>
+
+<style type="text/css">
+body {
+	background-image: url(/imagens/Fundo.png);
+	background-color: #00CDCD;
+}
+
+h1 {
+	font-weight: bold;
+	color: #696969;
+	font-style: italic;
+	/*    font-size: 100px;
+text-align: center;*/
+}
+
+h2 {
+	font-weight: bold;
+	color: #696969;
+	font-style: italic;
+	/*    font-size: 100px;
+text-align: center;*/
+}
+
+.box {
+	display: inline-block;
+}
+
+#modalDecision {
+	width: 1000px;
+	height: 1000px;
+}
+
+.card {
+	border-radius: 10px;
+	top: 10%;
+	margin: 0 auto;
+	float: none;
+	margin-bottom: 10px;
+}
+
+#bttBuscar {
+	width: 15rem;
+	font-weight: bold;
+}
+
+.textBairro{
+	font-size: 20px;
+}
+
+.textCidade {
+	font-size: 20px;
+}
+</style>
+
+</head>
+
+<body>
+	<nav class="navbar navbar-light navbar-expand-lg bg-light justify-content-between">
+		<div class="container-fluid">
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-nav">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="navbar-collapse collapse dual-nav w-50 order-1 order-md-0">
+
+			</div>
+			
+			<a href="/" class="navbar-brand mx-auto d-block text-center order-0 order-md-1 w-25"><img src="imagens/Logo.png" alt="Logo" style="width: 150px;"></a>
+			<div class="navbar-collapse collapse dual-nav w-50 order-2">
+			
+				<br>
+				
+				<!-- <ul th:if="${cliente != null}">
+					 <li th:text="${cliente.nome}"> Item one </li>
+					 <li> Item two </li>
+				</ul> -->
+			
+					<ul class="nav navbar-nav ml-auto" th:switch='true'>
+						<div class="mr-2" th:case="${cliente != null}">
+							<div class="dropdown">
+								<a class="btn btn-secondary dropdown-toggle"  th:text="*{cliente.nome}" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #008b8b; font-weight: bold;" >
+								</a>
+								
+								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+								    <a class="dropdown-item" th:href="@{'/edit/' + ${cliente.id}}" style="font-weight: bold;"><i class="fas fa-user-circle" style="margin-right: 8px;"></i>Perfil</a>
+								    <hr>
+								    <a class="dropdown-item" th:href="@{/logout}" style="font-weight: bold;"><i class="fas fa-power-off" style="margin-right: 8px;"></i>Desconectar</a>
+								</div>
+							</div>
+						</div>
+						
+						<div class="mr-2" th:case="${admin != null}">
+							<div class="dropdown">
+								<a class="btn btn-secondary dropdown-toggle"  th:text="*{admin.nome}" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #008b8b; font-weight: bold;" >
+								</a>
+								
+								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+								    <a class="dropdown-item" th:href="@{/listarCleaner}" style="font-weight: bold;"><i class="fas fa-chart-line" style="margin-right: 8px;"></i>DashBoard</a>
+								    <hr>
+								    <a class="dropdown-item" th:href="@{/logout}" style="font-weight: bold;"><i class="fas fa-power-off" style="margin-right: 8px;"></i>Desconectar</a>
+								</div>
+							</div>
+						</div>
+							
+						<div class="mr-2" th:case="${cleaner != null}">
+							<div class="dropdown">
+								<a class="btn btn-secondary dropdown-toggle"  th:text="*{cleaner.nomecompleto}" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #008b8b; font-weight: bold;" >
+								</a>
+								
+								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+								    <a class="dropdown-item" th:href="@{'/editCleaner/' + ${cleaner.id}}" style="font-weight: bold;"><i class="fas fa-user-circle" style="margin-right: 8px;"></i>Perfil</a>
+								    <hr>
+								    <a class="dropdown-item" th:href="@{/logout}" style="font-weight: bold;"><i class="fas fa-power-off" style="margin-right: 8px;"></i>Desconectar</a>
+								</div>
+							</div>
+						</div>
+					</ul>
+
+
+				<ul class="nav navbar-nav ml-auto"   th:if ="${cliente == null && cleaner == null && admin == null}">
+				
+					<div class="mr-2">
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCadastro" style="background-color: #008b8b; border-color: #008b8b"><i class="fas fa-user-plus" style="margin-right: 5px"></i>Cadastre-se</button>
+						<!-- MODAL CADASTRAR -->
+						<div class="modal fade" id="modalCadastro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+										
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel" style="font-size: 30px; font-weight: bold;">Selecione o seu tipo de usuário</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+
+									<div class="modal-body">
+										<div class="container">
+											<div class="row">
+												<div class="col-md-12">
+													<div class="row">
+
+														<!--CLEANER -->
+														<div class="col-md-6" align="center">
+															<img width="60%" src="imagens/040-glove.png"> 
+															
+															<br><br>
+															<h1 style="font-weight: bold;">Cleaner</h1>
+															<br> <br> 
+															
+															<a class="btn btn-primary btn-lg" th:href="@{/addCleaner/}" style="background-color: #008b8b; border-color: #008b8b">Selecionar</a>
+															<br>
+														</div>
+
+														<!--CLIENTE -->
+														<div class="col-md-6" align="center">
+															<img width="60%" src="imagens/teamwork.png"> <br>
+															
+															<br>
+															<h1 style="font-weight: bold;">Cliente</h1>
+															<br><br> 
+															
+															<a class="btn btn-primary btn-lg" th:href="@{/Add/}" style="background-color: #008b8b; border-color: #008b8b">Selecionar</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<br>
+					
+					<div class="mr-2">
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEntrar" style="background-color: #008b8b; border-color: #008b8b"><i class="fas fa-sign-in-alt" style="margin-right: 5px"></i>Entrar</button>
+						<!-- MODAL CADASTRAR -->
+						<div class="modal fade" id="modalEntrar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel" style="font-size: 30px; font-weight: bold;">Selecione o seu tipo de usuário</h5><button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+
+									<div class="modal-body">
+										<div class="container">
+											<div class="row">
+												<div class="col-md-12">
+													<div class="row">
+
+														<!--CLEANER -->
+														<div class="col-md-6" align="center">
+															<img width="60%" src="imagens/040-glove.png"> <br>
+															<br>
+															<h1 style="font-weight: bold;">Cleaner</h1>
+															<br> <br> <a class="btn btn-primary btn-lg" th:href="@{/login}" style="background-color: #008b8b; border-color: #008b8b"></i>Selecionar</a>
+														</div>
+
+														<!--CLIENTE -->
+														<div class="col-md-6" align="center">
+															<img width="60%" src="imagens/teamwork.png"> <br>
+															<br>
+															<h1 style="font-weight: bold;">Cliente</h1>
+															<br> <br> 
+															<a class="btn btn-primary btn-lg" th:href="@{/login}" style="background-color: #008b8b; border-color: #008b8b"></i>Selecionar</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</ul>
+				<br>
+			</div>
+		</div>
+	</nav>
+	
+	<br>
+	<br>
+	<div class="shadow card text-center" style="width: 70%;">
+		<div class="card-body">
+			<h1>Buscar por Bairro</h1>
+			<small id="emailHelp" class="form-text text-muted" style="color: #008B8B;">Descubra se tem alguem perto de você. Coloque a Bairro onde você reside. </small>
+			<hr>
+			<br> <input class="form-control form-control-lg" type="text" style="font-style: italic;" placeholder="Digite seu Bairro"> <br>
+			<button id="bttBuscar" type="button" class="btn btn-primary btn-lg efeitoBotao" style="background-color: #008b8b; font-weight: bold; border-color: #008B8B;">Buscar</button>
+			<small id="emailHelp" class="form-text text-muted" style="font-weight: bold; color: #008B8B;"> <a th:href="@{/AddAdmin/}"> Não sabe seu CEP? </a></small>
+		</div>
+	</div>
+	
+	<div class="container" id = "container1" style="max-width: 1080px; width: 72%" th:each="cleaner : ${cleaners}">
+		<div class="card mb-1" id="card1" style="max-width: 1080px;">
+			<div class="row no-gutters">
+				<div class="col-md-2">
+					<img src="imagens/User-icon.png" class="card-img" alt="..." style="margin-top: 18px;">
+				</div>
+				<div class="col-md-7">
+					<div class="card-body">
+						<h4 th:text="${cleaner.nomecompleto}" style="font-weight: bold"></h4>				
+						<hr>	
+						<div>
+							<i class="fas fa-city fa-2x" style="margin-right: 10px; margin-left: 15px;"></i><small class="textCidade" th:text="${cleaner.cidade}"></small>
+						</div>
+						<br>
+						<div>
+							<i class="fas fa-map-marker-alt fa-2x" style="margin-right: 10px; margin-left: 15px;"></i><small class="textBairro" th:text="${cleaner.bairro}"></small>
+						</div>
+					</div>	
+				</div>
+				<div class="col-md-2">
+					<a type="button" class="btn btn-warning" th:href="@{/servicos/solicitaServico/}" style="margin-top: 80px; margin-left: 100px;">Solicitar</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br>
+	<br>
+	<br>
+	<div class="shadow card text-center" style="width: 70%;">
+		<div class="card-body">
+			<h1>Conheça Nossos Serviços</h1>
+			<br> <br>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row">
+
+							<div class="col-md-3" align="center">
+								<img width="70%" src="imagens/042-toilet.png"> <br>
+								<h2 style="font-weight: bold;">Toilet</h2>
+							</div>
+
+
+							<div class="col-md-3 efeitoBotao" align="center">
+								<img width="70%" src="/imagens/021-iron.png" /> <br>
+								<h2 style="font-weight: bold;">Roupas</h2>
+
+							</div>
+
+							<div class="col-md-3" align="center">
+								<img width="70%" src="imagens/046-washing-machine.png"> <br>
+								<h2 style="font-weight: bold;">Lavagens</h2>
+
+							</div>
+
+							<div class="col-md-3" align="center">
+								<img width="70%" src="imagens/023-oven.png"> <br>
+								<h2 style="font-weight: bold;">Cozinha</h2>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br>
+	<br>
+	<br>
+	<br>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script>
+	    var API_NODE = "http://localhost:3000";
+		var API_JAVA = "http://localhost:8080";
+        var socket = io(API_NODE);
+
+        socket.on("solicitar", function (dados) {
+        	console.log(dados);
+        	buscaServico(dados.event.service_id);
+        });
+
+        socket.on("connected", (socketInfo) => {
+            console.log("Meu socket id a ser salvo é:", socketInfo);
+            salvaSocketId(1, socketInfo.socket_id, "CLEANER");
+        });
+        
+        function salvaSocketId(userId, socketId, userType) {	
+			const data = {
+					user_id: userId,
+					socket_id: socketId,
+					user_type: userType
+			};
+			
+			$.ajax({
+		        url: `${API_NODE}/socket-id`,
+		        type: 'post',
+		        dataType: 'json',
+		        contentType: 'application/json; charset=utf-8',
+		        data: JSON.stringify(data),
+		        success: function(retorno){
+		        	console.log(retorno);
+		        },
+		        error: function(err){
+		            console.log(err);
+		        }
+		    });   
+		}
+        
+        function buscaServico(servicoId) {
+        	const data = {};
+			
+			$.ajax({
+		        url: `${API_JAVA}/servicos/buscar/${servicoId}`,
+		        type: 'get',
+		        dataType: 'json',
+		        contentType: 'application/json; charset=utf-8',
+		        // data: JSON.stringify(data),
+		        success: function(servico){
+		        	console.log(servico)
+		        	const alerta = `ID ${servico.id}\nPreço: ${servico.price}\nStatus: ${servico.status}`;
+		        	
+		        	
+		        	$.confirm({
+		        	    title: '<h4>Solicitação de Serviço</h4>',
+		        	    content: '<hr>' +'<h6>'+`ID ${servico.id}`+'</h6>'
+		        	    +'<p>Preço: R$'+`${servico.price}`+',00 </p>'
+		        	    +'<p>'+`Status: ${servico.status}`+'</p>'
+		        	    +'<p>Localização: Indianopolis, Caruaru</p>',
+		        	    
+		        	    buttons: {
+		        	        	confirmar: {
+		        	            text: 'Aceitar pedido',
+		        	            
+		        	            btnClass: 'btn-green',
+		        	            keys: ['enter', 'shift'],
+		        	            action: function(){
+		        	                $.alert('A solicitação foi aceita.');
+		        	            }
+		        	        },
+		        	        recusar: {
+		        	            text: 'Recusar Pedido',
+		        	            
+		        	            btnClass: 'btn-red',
+		        	            keys: ['enter', 'shift'],
+		        	            action: function(){
+		        	                $.alert('A solicitação foi recusada.');
+		        	            }
+		        	        }
+		        	        
+		        	    }
+		        	});
+		        	
+		        	
+		        },
+		        error: function(err){
+		            console.log(err);
+		        }
+		    }); 
+        }
+    </script>
+</body>

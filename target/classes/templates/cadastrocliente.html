@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+<title>Cadastro Cliente</title>
+
+<style type="text/css">
+body {
+	background-image: url(/imagens/Fundo.png);
+	background-color: black;
+}
+
+button {
+	cursor: pointer;
+}
+
+@media screen and (min-width: 320px) {
+	button {
+		margin-top: 10px;
+	}
+}
+
+label {
+	font-size: 15px;
+}
+
+#divinterna {
+	margin: auto;
+	background-color: #ffffff;
+	border-radius: 6px;
+}
+
+#divexterna {
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+</style>
+
+<script type="text/javascript">
+
+		function mascaratell(o,f){
+			v_obj=o
+			v_fun=f
+			setTimeout("execmascara()",1)
+		}
+		function execmascara(){
+			v_obj.value=v_fun(v_obj.value)
+		}
+		function mtel(v){
+		    v=v.replace(/\D/g,"");             //Remove tudo o que não é dígito
+		    v=v.replace(/^(\d{2})(\d)/g,"($1) $2"); //Coloca parênteses em volta dos dois primeiros dígitos
+		    v=v.replace(/(\d)(\d{4})$/,"$1-$2");    //Coloca hífen entre o quarto e o quinto dígitos
+		    return v;
+		}
+		
+		function fMasc(objeto,mascara) {
+			obj=objeto
+			masc=mascara
+			setTimeout("fMascEx()",1)
+		}
+		function fMascEx() {
+			obj.value=masc(obj.value)
+		}
+		
+		function mCPF(cpf){
+			cpf=cpf.replace(/\D/g,"")
+			cpf=cpf.replace(/(\d{3})(\d)/,"$1.$2")
+			cpf=cpf.replace(/(\d{3})(\d)/,"$1.$2")
+			cpf=cpf.replace(/(\d{3})(\d{1,2})$/,"$1-$2")
+			return cpf
+		}
+		
+		function mRG (rg){
+			rg=rg.replace(/\D/g,"")
+			rg=rg.replace(/(\d{1})(\d)/,"$1.$2")
+			rg=rg.replace(/(\d{3})(\d)/,"$1.$2")
+			return rg
+		}
+
+		function mCEP(cep){
+			cep=cep.replace(/\D/g,"")
+
+			cep=cep.replace(/(\d{5})(\d)/,"$1-$2")
+			return cep
+		}
+		
+		function onlynumber(evt) {
+			   var theEvent = evt || window.event;
+			   var key = theEvent.keyCode || theEvent.which;
+			   key = String.fromCharCode( key );
+			   //var regex = /^[0-9.,]+$/;
+			   var regex = /^[0-9.]+$/;
+			   if( !regex.test(key) ) {
+			      theEvent.returnValue = false;
+			      if(theEvent.preventDefault) theEvent.preventDefault();
+			   }
+			}
+		
+		
+		(function() {
+			'use strict';
+			window.addEventListener('load', function() {
+			    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+			    var forms = document.getElementsByClassName('needs-validation');
+			    // Loop over them and prevent submission
+			    var validation = Array.prototype.filter.call(forms, function(form) {
+			    	form.addEventListener('submit', function(event) {
+			    		if (form.checkValidity() === false) {
+			    			event.preventDefault();
+			    			event.stopPropagation();
+			    		}
+			    		form.classList.add('was-validated');
+			    	}, false);
+			    });
+			}, false);
+		})();
+
+        $(document).ready(function() {
+
+            function limpa_formulário_cep() {
+                // Limpa valores do formulário de cep.
+                $("#rua").val("");
+                $("#bairro").val("");
+                $("#cidade").val("");
+                $("#uf").val("");
+            }
+            
+            //Quando o campo cep perde o foco.
+            $("#cep").blur(function() {
+
+                //Nova variável "cep" somente com dígitos.
+                var cep = $(this).val().replace(/\D/g, '');
+
+                //Verifica se campo cep possui valor informado.
+                if (cep != "") {
+
+                    //Expressão regular para validar o CEP.
+                    var validacep = /^[0-9]{8}$/;
+
+                    //Valida o formato do CEP.
+                    if(validacep.test(cep)) {
+
+
+                        //Consulta o webservice viacep.com.br/
+                        $.getJSON("https://viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
+
+                            if (!("erro" in dados)) {
+                                //Atualiza os campos com os valores da consulta.
+                                $("#endereco").val(dados.logradouro);
+                                $("#bairro").val(dados.bairro);
+                                $("#cidade").val(dados.localidade);
+                                $("#uf").val(dados.uf);
+                            } //end if.
+                            else {
+                                //CEP pesquisado não foi encontrado.
+                                limpa_formulário_cep();
+                                alert("CEP não encontrado.");
+                            }
+                        });
+                    } //end if.
+                    else {
+                        //cep é inválido.
+                        limpa_formulário_cep();
+                        alert("Formato de CEP inválido.");
+                    }
+                } //end if.
+                else {
+                    //cep sem valor, limpa formulário.
+                    limpa_formulário_cep();
+                }
+            });
+        });
+
+    </script>
+
+</head>
+<body style="background-color: #00cdcd">
+	<nav class="navbar navbar-light navbar-expand-lg bg-light justify-content-between">
+		<div class="container-fluid">
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-nav">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="navbar-collapse collapse dual-nav w-50 order-1 order-md-0">
+
+			</div>
+			
+			<a href="/" class="navbar-brand mx-auto d-block text-center order-0 order-md-1 w-25"><img src="/imagens/Logo.png" alt="Logo" style="width: 150px;"></a>
+			<div class="navbar-collapse collapse dual-nav w-50 order-2">
+			
+				<br>
+				
+				<ul class="nav navbar-nav ml-auto">
+					
+					<div class="mr-2">
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEntrar" style="background-color: #008b8b; border-color: #008b8b"><i class="fas fa-sign-in-alt" style="margin-right: 5px"></i>Entrar</button>
+						<!-- MODAL CADASTRAR -->
+						<div class="modal fade" id="modalEntrar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel" style="font-size: 30px; font-weight: bold;">Selecione o seu tipo de usuário</h5><button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+
+									<div class="modal-body">
+										<div class="container">
+											<div class="row">
+												<div class="col-md-12">
+													<div class="row">
+
+														<!--CLEANER -->
+														<div class="col-md-6" align="center">
+															<img width="60%" src="/imagens/040-glove.png"> <br>
+															<br>
+															<h1 style="font-weight: bold;">Cleaner</h1>
+															<br> <br> <a class="btn btn-primary btn-lg" th:href="@{/login}" style="background-color: #008b8b; border-color: #008b8b"></i>Selecionar</a>
+														</div>
+
+														<!--CLIENTE -->
+														<div class="col-md-6" align="center">
+															<img width="60%" src="/imagens/teamwork.png"> <br>
+															<br>
+															<h1 style="font-weight: bold;">Cliente</h1>
+															<br> <br> 
+															<a class="btn btn-primary btn-lg" th:href="@{/login}" style="background-color: #008b8b; border-color: #008b8b"></i>Selecionar</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</ul>
+				<br>
+			</div>
+		</div>
+	</nav>
+
+	<br>
+	<form class="form-horizontal needs-validation" novalidate th:object="${cliente}" th:action="@{/save}" method="POST">
+		<div class="col pt-lg-1" id="divexterna">
+			<div class="col-lg-6 col-sm-12 mt-10 col-md-6 p-5 " id="divinterna">
+
+				<div class="col" align="center" style="color: #6d6d6d;">
+					<h3 class="h3">Cadastro</h3>
+					<input type="hidden" class="form-control" id="id" th:field="*{id}" placeholder="id">
+				</div>
+				<hr>
+				<small id="emailHelp" class="form-text text-muted" style="text-align: center">O Campo * é obrigatório.</small>
+				
+					</br>
+						
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="inputNome">Nome*</label>
+								<input type="text" class="form-control" id="nome" th:field="*{nome}" placeholder="Nome Completo" required>
+								<div class="invalid-feedback">
+									Esse é um campo Obrigatório.
+								</div>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="inputEmail">E-mail*</label>
+								<input type="email" class="form-control" id="email" th:field="*{email}" placeholder="cliente@cleanhome.com" required>
+								<div class="invalid-feedback">
+							        Esse é um campo Obrigatório.
+							    </div>
+							</div>
+						</div>
+	
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="inputCpf">CPF*</label>
+								<input type="text" class="form-control" id="cpf" th:field="*{cpf}" placeholder="000.000.000-00" onkeyup="fMasc( this, mCPF );" maxlength="14" required>
+								<div class="invalid-feedback">
+							        Esse é um campo Obrigatório.
+							    </div>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="inputAddress2">Senha*</label>
+								<input type="password" class="form-control" id="senha" th:field="*{senha}" placeholder="******" required>
+								<div class="invalid-feedback">
+							        Esse é um campo Obrigatório.
+							    </div>
+							</div>
+						</div>
+		
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="inputCity">RG*</label>
+								<input type="text" class="form-control" id="rg" th:field="*{rg}" placeholder="0.000.000" onkeyup="fMasc( this, mRG );" maxlength="9" required>
+								<div class="invalid-feedback">
+							        Esse é um campo Obrigatório.
+							    </div>
+							</div> 
+						</div>
+		
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="inputCity">Telefone*</label>
+								<input type="text" class="form-control" id="telefone" th:field="*{telefone}" placeholder="(00) 0000-0000" onkeyup="fMasc( this, mtel );" maxlength="14" required>
+								<div class="invalid-feedback">
+							        Esse é um campo Obrigatório.
+							    </div>
+							</div> 
+						</div>
+		
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="inputCity">Endereço*</label>
+								<input type="text" class="form-control" id="endereco" th:field="*{endereco}" placeholder="Endereço" required>
+								<div class="invalid-feedback">
+							        Esse é um campo Obrigatório.
+							    </div>
+							</div>
+						</div>
+		
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="inputZip">Bairro*</label>
+								<input type="text" class="form-control" id="bairro" th:field="*{bairro}" placeholder="Bairro" required>
+								<div class="invalid-feedback">
+							        Esse é um campo Obrigatório.
+							    </div>
+							</div>
+						</div>
+						
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="inputZip">CEP*</label>
+								<input type="text" class="form-control" id="cep" th:field="*{cep}" placeholder="00000-000" onkeyup="fMasc( this, mCEP );" maxlength="9" required>
+								<div class="invalid-feedback">
+							        Esse é um campo Obrigatório.
+							    </div>
+							</div>
+						</div>
+		
+						<div class="form-row">
+							<div class="form-group col-md-4">
+								<label for="inputCity">Cidade*</label>
+								<input type="text" class="form-control" id="cidade" th:field="*{cidade}" placeholder="Cidade" required>
+								<div class="invalid-feedback">
+							        Esse é um campo Obrigatório.
+							    </div>
+							</div>
+		
+							<div class="form-group col-md-2">
+								<label for="inputState">UF*</label> 
+								<select class="custom-select" id="uf" th:field="*{uf}" required>
+									<option th:text="--" th:value="'NULL'"></option>
+									<option th:text="AC" th:value="'AC'"></option>
+									<option th:text="AL" th:value="'AL'"></option>
+									<option th:text="AP" th:value="'AP'"></option>
+									<option th:text="AM" th:value="'AM'"></option>
+									<option th:text="BA" th:value="'BA'"></option>
+									<option th:text="CE" th:value="'CE'"></option>
+									<option th:text="DF" th:value="'DF'"></option>
+									<option th:text="GO" th:value="'GO'"></option>
+									<option th:text="MA" th:value="'MA'"></option>
+									<option th:text="MT" th:value="'MT'"></option>
+									<option th:text="MS" th:value="'MS'"></option>
+									<option th:text="MG" th:value="'MG'"></option>
+									<option th:text="PA" th:value="'PA'"></option>
+									<option th:text="PB" th:value="'PB'"></option>
+									<option th:text="PR" th:value="'PR'"></option>
+									<option th:text="PE" th:value="'PE'"></option>
+									<option th:text="PI" th:value="'PI'"></option>
+									<option th:text="RJ" th:value="'RJ'"></option>
+									<option th:text="RN" th:value="'RN'"></option>
+									<option th:text="RS" th:value="'RS'"></option>
+									<option th:text="RO" th:value="'RO'"></option>
+									<option th:text="RR" th:value="'RR'"></option>
+									<option th:text="SC" th:value="'SC'"></option>
+									<option th:text="SP" th:value="'SP'"></option>
+									<option th:text="SE" th:value="'SE'"></option>
+									<option th:text="TO" th:value="'TO'"></option>
+								</select>
+								<div class="invalid-feedback">Example invalid custom select feedback</div>
+							</div>
+						</div>
+
+					<br> 
+					<br>
+					<div class="container-fluid" align="center">
+					<button type="submit" class="btn btn-lg btn-success" style="width: 50%; font-size: 14px; font-weight: bold;">Enviar Formulário</button>
+					</div>
+					<br>
+			</div>
+		</div>
+	</form>
+	<br>
+	<br>
+</body>
+</html>

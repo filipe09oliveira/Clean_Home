@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+<title>Login</title>
+</head>
+
+<style type="text/css">
+
+body { 
+      background-image:url("/imagens/Fundo.png");
+    }
+
+
+  .card{
+      width: 38rem;
+      height:40rem;
+      border-radius: 10px;
+      top: 3%;
+      margin: 0 auto;
+      float: none;
+      margin-bottom: 10px; 
+  }
+  .card-title{
+      text-align: center;
+      font-size: 35px;
+      font-weight: bold;
+  }
+  .form-group{
+    font-weight: bold;
+
+  }
+
+#bttEntrar{
+  width: 15rem;
+  font-weight: bold;
+}
+
+</style>
+
+<body style="background-color: #00CDCD">
+	<nav class="navbar navbar-light navbar-expand-lg bg-light justify-content-between">
+		<div class="container-fluid">
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-nav">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="navbar-collapse collapse dual-nav w-50 order-1 order-md-0">
+
+			</div>
+			
+			<a href="/" class="navbar-brand mx-auto d-block text-center order-0 order-md-1 w-25"><img src="imagens/Logo.png" alt="Logo" style="width: 150px;"></a>
+			<div class="navbar-collapse collapse dual-nav w-50 order-2">
+
+				<ul class="nav navbar-nav ml-auto">
+				
+					<div class="mr-2">
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCadastro" style="background-color: #008b8b; border-color: #008b8b"><i class="fas fa-user-plus" style="margin-right: 5px"></i>Cadastre-se</button>
+						<!-- MODAL CADASTRAR -->
+						<div class="modal fade" id="modalCadastro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+										
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel" style="font-size: 30px; font-weight: bold;">Selecione o seu tipo de usuário</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+
+									<div class="modal-body">
+										<div class="container">
+											<div class="row">
+												<div class="col-md-12">
+													<div class="row">
+
+														<!--CLEANER -->
+														<div class="col-md-6" align="center">
+															<img width="60%" src="imagens/040-glove.png"> 
+															
+															<br><br>
+															<h1 style="font-weight: bold;">Cleaner</h1>
+															<br> <br> 
+															
+															<a class="btn btn-primary btn-lg" th:href="@{/addCleaner/}" style="background-color: #008b8b; border-color: #008b8b">Selecionar</a>
+															<br>
+														</div>
+
+														<!--CLIENTE -->
+														<div class="col-md-6" align="center">
+															<img width="60%" src="imagens/teamwork.png"> <br>
+															
+															<br>
+															<h1 style="font-weight: bold;">Cliente</h1>
+															<br><br> 
+															
+															<a class="btn btn-primary btn-lg" th:href="@{/Add/}" style="background-color: #008b8b; border-color: #008b8b">Selecionar</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</ul>
+				<br>
+			</div>
+		</div>
+	</nav>
+	
+	<br>
+	
+	<div class="card">
+	  <div class="card-body">
+	  	<form th:action="@{/fazer-login}" method="POST">
+	   		<h5 class="card-title">Entrar</h5>
+	    	</br>
+		    <small id="emailHelp" class="form-text text-muted" style=" text-align: center">Insira seus dados para acessar</small>
+		    </br>
+		   <fieldset>
+				<div th:if="${param.error}">
+	           		<div class="alert alert-danger">
+						E-mail ou senha estão inválidos.
+					</div>
+				</div>   
+				<div th:if="${param.logout}">
+					<div class="alert alert-info">
+	                   Você foi desconectado.
+	                </div>
+				</div>
+			    <div class="form-group">
+			        <label for="inputEmail">Email</label>
+			        <input type="text" name="username" id="username" class="form-control input-lg" placeholder="nome@user.com" required="true" autofocus="true"/>
+			        </br>
+			    </div>
+			    <div class="form-group">
+			        <label for="inputSenha">Senha</label>
+			        <input type="password" name="password" id="password" class="form-control input-lg" placeholder="********" required="true"/>
+			    </div> 
+			    <div class="col text-center"> 
+			      </br>
+			      </br>
+			      <input type="submit" class="btn btn-lg btn-primary btn-block" value="Entrar"/>
+			    </div>
+			</fieldset>
+		</form>
+		    </br>
+		    </br>
+		    
+		    <h6 style="text-align: center">Não tem conta? <a href="" style="color:#008B8B"> Cadastre-se </a></h6>
+	  </div>
+	</div>
+	<br>
+
+
+</body>
+</html>
